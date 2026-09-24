@@ -1,10 +1,15 @@
 require("dotenv").config();
-const { REST, Routes, SlashCommandBuilder } = require("discord.js");
+const {
+  REST,
+  Routes,
+  SlashCommandBuilder,
+  PermissionFlagsBits,
+} = require("discord.js");
 
 const commands = [
   new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("Add a song (or all songs) to the queue")
+    .setName("chiko")
+    .setDescription("Add local MP3s (or one) to the queue")
     .addStringOption((o) =>
       o
         .setName("song")
@@ -15,8 +20,8 @@ const commands = [
       o.setName("shuffle").setDescription("Shuffle when adding all songs"),
     ),
   new SlashCommandBuilder()
-    .setName("youtube")
-    .setDescription("Play from YouTube (link or search)")
+    .setName("play")
+    .setDescription("Play one song from YouTube (link or search)")
     .addStringOption((o) =>
       o
         .setName("query")
@@ -25,7 +30,7 @@ const commands = [
         .setAutocomplete(true),
     ),
   new SlashCommandBuilder()
-    .setName("mix")
+    .setName("list")
     .setDescription(
       "Add popular songs for an artist or genre (or a playlist link)",
     )
@@ -49,6 +54,36 @@ const commands = [
       o.setName("shuffle").setDescription("Shuffle the picked songs"),
     ),
   new SlashCommandBuilder().setName("help").setDescription("Show all commands"),
+  new SlashCommandBuilder()
+    .setName("favorites")
+    .setDescription("Show your saved favorite songs"),
+  new SlashCommandBuilder()
+    .setName("unfavorite")
+    .setDescription("Remove a song from your favorites")
+    .addIntegerOption((o) =>
+      o
+        .setName("position")
+        .setDescription("Position in /favorites")
+        .setMinValue(1)
+        .setRequired(true),
+    ),
+  new SlashCommandBuilder()
+    .setName("gw")
+    .setDescription(
+      "Show every Fantasy Premier League match in the current gameweek",
+    ),
+  new SlashCommandBuilder()
+    .setName("setremindchannel")
+    .setDescription(
+      "Post FPL deadline reminders (24h & 2h, tags @everyone) in this channel",
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+  new SlashCommandBuilder()
+    .setName("testremind")
+    .setDescription(
+      "Send a sample FPL reminder now, to check it works (doesn't affect the real schedule)",
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
   new SlashCommandBuilder().setName("queue").setDescription("Show the queue"),
   new SlashCommandBuilder().setName("skip").setDescription("Skip current song"),
   new SlashCommandBuilder().setName("pause").setDescription("Pause playback"),
